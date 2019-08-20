@@ -1,25 +1,18 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React from 'react';
+import React from 'react'
 import {
+  TextInput,
   SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
   StatusBar,
-} from 'react-native';
+} from 'react-native'
 
 const App = () => {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar backgroundColor='#8332a8' barStyle="light-content" />
       <SafeAreaView>
         <ScrollView>
           <View>
@@ -28,12 +21,12 @@ const App = () => {
         </ScrollView>
       </SafeAreaView>
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: '#8332a8',
+    backgroundColor: '#fff',
   },
   engine: {
     position: 'absolute',
@@ -68,6 +61,6 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     textAlign: 'right',
   },
-});
+})
 
-export default App;
+export default App
