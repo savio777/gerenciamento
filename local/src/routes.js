@@ -7,7 +7,7 @@ const App = createStackNavigator({
     Home: {
         screen: Main,
         navigationOptions: {
-            title: 'Home',
+            title: 'HOME',
             headerStyle: {
                 backgroundColor: '#82589F',
             },
@@ -20,6 +20,17 @@ const App = createStackNavigator({
     },
     Caixa: {
         screen: Caixa,
+        navigationOptions: {
+            title: 'CAIXA',
+            headerStyle: {
+                backgroundColor: '#82589F',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {            
+                textAlign: 'center',
+                flex: 1
+            }
+        }
     }
 })
 

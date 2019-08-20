@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,7 +8,12 @@ import {
   StatusBar,
 } from 'react-native'
 
-function Main({ navigation }) {
+const Main = ({ navigation }) => {
+
+  // somente para agilizar os testes com a tela Caixa
+  useEffect(() => {
+    navigation.navigate('Caixa')    
+  }, [])
 
   return (
     <>
@@ -43,7 +48,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 5,
     justifyContent: 'center',
-    
+
   },
   textButton: {
     color: '#fff',
