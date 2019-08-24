@@ -16,8 +16,6 @@ import {
 
 import AsyncStorage from '@react-native-community/async-storage'
 
-import add from '../../assets/icons8-mais-24.png'
-
 const Caixa = ({ navigation }) => {
 
   const [desc, setDesc] = useState('')
@@ -25,23 +23,23 @@ const Caixa = ({ navigation }) => {
   const [quantidade, setQuantidade] = useState('')
   const [tipo, setTipo] = useState('')
 
-  const [fluxo, setFluxo] = useState([])
+  // inicializador para testes
+  const [fluxo, setFluxo] = useState([
+    { id: `${1}`, desc: 'exemplo 1', val: 10.5, quantidade: 4, tipo: 'entrada' },
+    { id: `${2}`, desc: 'exemplo 2', val: 15.5, quantidade: 1, tipo: 'saida' }
+  ])
 
   const handleFluxo = () => {
-    setFluxo([...fluxo, { id: `${fluxo.length}`, desc: desc, val: valor, quantidade: quantidade }])
+    setFluxo([
+      ...fluxo, { id: `${fluxo.length + 1}`, desc: desc, val: valor, quantidade: quantidade, tipo: tipo }
+    ])
   }
-
-  /*const listTest = [
-    { desc: 'iae kk', val: 10.5, quantidade: 4, tipo: 'entrada' },
-    { desc: 'boa noite', val: 35.1, quantidade: 2, tipo: 'saida' },
-    { desc: 'bom dia kk', val: 12.1, quantidade: 8, tipo: 'entrada' }
-  ]*/
 
   return (
     <>
       <StatusBar backgroundColor='#82589F' barStyle="light-content" />
       <SafeAreaView style={styles.container}>
-        <View>
+        <View style={styles.containerInput}>
           <TextInput
             style={styles.input}
             placeholder='Descrição'
@@ -54,7 +52,6 @@ const Caixa = ({ navigation }) => {
             keyboardType='number-pad'
             onChangeText={setValor}
             value={valor}
-          //value={`${valor}`}
           />
           <TextInput
             style={styles.input}
@@ -62,31 +59,46 @@ const Caixa = ({ navigation }) => {
             keyboardType='number-pad'
             onChangeText={setQuantidade}
             value={quantidade}
-          //value={`${quantidade}`}
           />
-          {/* FALTA IMPLEMENTAR O CAMPO TIPO */}
-          {/*<Picker
+          <Picker
             selectedValue={tipo}
-            onValueChange={setTipo}
+            onValueChange={(valor, index) => { setTipo(valor) }}
           >
             <Picker.Item label='Tipo' value='' />
             <Picker.Item label='Entrada' value='entrada' />
             <Picker.Item label='Saida' value='saida' />
-          </Picker>*/}
+          </Picker>
           <TouchableOpacity
-            style={styles.buttonAdd}
+            style={styles.button}
             onPress={handleFluxo}
           >
-            <Image source={add} />
+            <Text style={styles.textButton}>SALVAR</Text>
           </TouchableOpacity>
+        </View>
+        <View>
 
-          <ScrollView>
+          <ScrollView style={styles.scroll}>
+            {/* SERÁ O TITULO DA TABELA */}
+            {/*<FlatList
+              data={[1, 'id', 'descrição', 'valor', 'quantidade', 'tipo']}
+            />*/}
             <FlatList
               data={fluxo}
-              renderItem={({ item }) => <Text>{item.desc}, {item.val}, {item.quantidade}, {item.tipo}</Text>}
-              keyExtractor={(item, index) => item.id}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => {
+                return (
+                  <View style={styles.containerList}>
+                    <Text style={styles.textList}>{item.id} , {item.desc}, {item.val}, {item.quantidade}, {item.tipo}</Text>
+                  </View>
+                )
+              }}
             />
           </ScrollView>
+
+          <View style={styles.containerFooter}>
+            {/* SERÁ O CONTADOR DO SALDO EM CAIXA */}
+            <Text>teste</Text>
+          </View>
 
         </View>
       </SafeAreaView>
@@ -98,10 +110,27 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f1e6ff',
     flex: 1,
-    justifyContent: 'center',
     alignContent: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 50
-
+  },
+  scroll: {
+    marginTop: 10
+  },
+  containerInput: {
+    //justifyContent: 'flex-start'
+  },
+  containerFooter: {
+    //justifyContent: 'flex-end'
+  },
+  containerList: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    flexGrow: 1,
+    margin: 3,
+    
+  },
+  textList: {
   },
   input: {
     marginTop: 20,
@@ -115,9 +144,20 @@ const styles = StyleSheet.create({
   inputSelect: {
     marginTop: 10
   },
-  buttonAdd: {
-    marginTop: 10
+  button: {
+    backgroundColor: '#2C3A47',
+    height: 50,
+    borderRadius: 5,
+    justifyContent: 'center',
+
+  },
+  textButton: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16
   }
+
 })
 
 export default Caixa
