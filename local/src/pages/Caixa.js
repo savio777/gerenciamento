@@ -11,29 +11,45 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  Image
 } from 'react-native'
 
 import AsyncStorage from '@react-native-community/async-storage'
 
 const Caixa = ({ navigation }) => {
 
-  const [desc, setDesc] = useState('')
+  const [descricao, setDesc] = useState('')
   const [valor, setValor] = useState('')
   const [quantidade, setQuantidade] = useState('')
   const [tipo, setTipo] = useState('')
 
   // inicializador para testes
-  const [fluxo, setFluxo] = useState([
-    { id: `${1}`, desc: 'exemplo 1', val: 10.5, quantidade: 4, tipo: 'entrada' },
-    { id: `${2}`, desc: 'exemplo 2', val: 15.5, quantidade: 1, tipo: 'saida' }
-  ])
+  const [fluxo, setFluxo] = useState([])
+
+  const [saldo, setSaldo] = useState(0)
 
   const handleFluxo = () => {
     setFluxo([
-      ...fluxo, { id: `${fluxo.length + 1}`, desc: desc, val: valor, quantidade: quantidade, tipo: tipo }
+      ...fluxo, { id: `${fluxo.length + 1}`, descricao: descricao, valor: valor, quantidade: quantidade, tipo: tipo }
     ])
   }
+
+  useEffect(() => {
+    let entrada = 0
+    let saida = 0
+    let saldo = 0
+
+    for (let i in fluxo) {
+      if (fluxo[i].tipo === 'entrada') {
+        entrada += Number(fluxo[i].valor) * Number(fluxo[i].quantidade)
+      } else if (fluxo[i].tipo === 'saida') {
+        saida += Number(fluxo[i].valor) * Number(fluxo[i].quantidade)
+      }
+    }
+
+    saldo = entrada - saida
+
+    setSaldo(saldo)
+  }, [fluxo])
 
   return (
     <>
@@ -44,7 +60,7 @@ const Caixa = ({ navigation }) => {
             style={styles.input}
             placeholder='Descrição'
             onChangeText={setDesc}
-            value={desc}
+            value={descricao}
           />
           <TextInput
             style={styles.input}
@@ -88,16 +104,23 @@ const Caixa = ({ navigation }) => {
               renderItem={({ item }) => {
                 return (
                   <View style={styles.containerList}>
-                    <Text style={styles.textList}>{item.id} , {item.desc}, {item.val}, {item.quantidade}, {item.tipo}</Text>
+                    <Text style={styles.textList}>{item.id} , {item.descricao}, {item.valor}, {item.quantidade}, {item.tipo}</Text>
                   </View>
                 )
               }}
             />
           </ScrollView>
 
-          <View style={styles.containerFooter}>
-            {/* SERÁ O CONTADOR DO SALDO EM CAIXA */}
-            <Text>teste</Text>
+          <View style={styles.separate} />
+          <View style={styles.containerSaldo}>
+            <Text style={styles.textSaldo}>SALDO</Text>
+            <View >
+              {(saldo > 0) ? (
+                <Text style={{ color: '#27ff00' }}>{saldo}</Text>
+              ) : (
+                  <Text style={{ color: '#ff2400' }}>{saldo}</Text>
+                )}
+            </View>
           </View>
 
         </View>
@@ -111,7 +134,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f1e6ff',
     flex: 1,
     alignContent: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 50
   },
   scroll: {
@@ -128,9 +151,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexGrow: 1,
     margin: 3,
-    
+  },
+  containerSaldo: {
+    backgroundColor: '#fff'
+  },
+  textSaldo: {
+    fontWeight: 'bold'
+  },
+  separate: {
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: '#2C3A47',
+    width: 320,
+    height: 5
   },
   textList: {
+
   },
   input: {
     marginTop: 20,
