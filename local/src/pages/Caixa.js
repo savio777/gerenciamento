@@ -22,14 +22,37 @@ const Caixa = ({ navigation }) => {
   const [quantidade, setQuantidade] = useState('')
   const [tipo, setTipo] = useState('')
 
-  // inicializador para testes
   const [fluxo, setFluxo] = useState([])
 
   const [saldo, setSaldo] = useState(0)
 
+  const headList = [
+    {
+      /*headId: 'id',
+      headDescricao: 'descrição',
+      headValor: 'valor',
+      headQuantidade: 'quantidade',
+      headTipo: 'tipo',*/
+      titleHeads: [
+        'id',
+        'descrição',
+        'valor',
+        'quantidade',
+        'tipo'
+      ]
+    }
+  ]
+
   const handleFluxo = () => {
     setFluxo([
-      ...fluxo, { id: `${fluxo.length + 1}`, descricao: descricao, valor: valor, quantidade: quantidade, tipo: tipo }
+      ...fluxo,
+      {
+        id: `${fluxo.length + 1}`,
+        descricao: descricao,
+        valor: valor,
+        quantidade: quantidade,
+        tipo: tipo
+      }
     ])
   }
 
@@ -90,27 +113,44 @@ const Caixa = ({ navigation }) => {
           >
             <Text style={styles.textButton}>SALVAR</Text>
           </TouchableOpacity>
+
         </View>
-        <View>
 
-          <ScrollView style={styles.scroll}>
-            {/* SERÁ O TITULO DA TABELA */}
-            {/*<FlatList
-              data={[1, 'id', 'descrição', 'valor', 'quantidade', 'tipo']}
-            />*/}
-            <FlatList
-              data={fluxo}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => {
-                return (
-                  <View style={styles.containerList}>
-                    <Text style={styles.textList}>{item.id} , {item.descricao}, {item.valor}, {item.quantidade}, {item.tipo}</Text>
-                  </View>
-                )
-              }}
-            />
-          </ScrollView>
+        <FlatList
+          data={headList}
+          keyExtractor={(item, index) => { item.id }}
+          numColumns={5}
+          renderItem={
+            ({ item }) => {
+              return (
+                <View style={styles.containerList}>
+                  <Text style={styles.textList}>{item.titleHeads}</Text>
+                </View>
+              )
+            }
+          }
+        />
 
+        <ScrollView
+          style={styles.scroll}
+        >
+          {/* https://stackoverflow.com/questions/44357336/setting-up-a-table-layout-in-react-native */}
+          <View style={styles.containerTable}>
+            {(fluxo.length > 0) && fluxo.map((value) => {
+              return (
+                <View key={value.id} style={styles.table}>
+                  <Text style={styles.rowTable}>{value.descricao}</Text>
+                  <Text style={styles.rowTable}>{value.valor}</Text>
+                  <Text style={styles.rowTable}>{value.quantidade}</Text>
+                  <Text style={styles.rowTable}>{value.tipo}</Text>
+                </View>
+              )
+            })}
+          </View>
+        </ScrollView>
+
+
+        <View style={styles.containerFooter}>
           <View style={styles.separate} />
           <View style={styles.containerSaldo}>
             <Text style={styles.textSaldo}>SALDO</Text>
@@ -138,19 +178,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50
   },
   scroll: {
-    marginTop: 10
+    marginTop: 10,
+    paddingVertical: 40
   },
   containerInput: {
     //justifyContent: 'flex-start'
   },
   containerFooter: {
-    //justifyContent: 'flex-end'
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 20
   },
-  containerList: {
+  containerTable: {
+    flex: 1,
     alignItems: 'center',
-    backgroundColor: '#fff',
-    flexGrow: 1,
-    margin: 3,
+    justifyContent: 'center'
+  },
+  table: {
+    flex: 1,
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    marginRight: 2
+  },
+  rowTable: {
+    alignSelf: 'stretch'
   },
   containerSaldo: {
     backgroundColor: '#fff'
